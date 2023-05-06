@@ -2,12 +2,24 @@ const fs = require('fs')
 //Challenge
 class ProductManager{
     constructor(){
-        this.products = [];
-        this.path = ('desafio.json')
+        this.path = 'desafio.json'
+        this.products = JSON.parse(fs.readFileSync('desafio.json','utf-8')) || [];
     }
     addProduct(title,description,price,thumbnail,code,stock){
+        let idMax = 0;
+
+        //Add Id
+        this.products.forEach((product) => {
+            if(product.id > idMax) {
+                idMax = product.id
+                return
+            }
+        })
+
+        idMax++
+
         const product = {
-            id: this.products.length + 1,
+            id: idMax,
             title,
             description,
             price,
@@ -40,7 +52,7 @@ class ProductManager{
     getProducts(){
         //Get the all the products
         const data = JSON.parse(fs.readFileSync(this.path, 'utf-8'));
-        return data
+        console.log(data)
 
     }
     getProductsById(id){
@@ -82,11 +94,11 @@ class ProductManager{
     }
 }
 
-const productM = new ProductManager;
+const productM = new ProductManager();
 
 productM.addProduct('Producto Prueba','Este es un producto prueba',200,'Sin imagen','abc123',25);
 productM.addProduct('Producto Prueba2','Este es un producto prueba2',300,'Sin imagen','abc1234',35);
+productM.addProduct('Producto Prueba3','Este es un producto prueba3',400,'Sin imagen','abc12345',45);
 
 // productM.updateProduct(2,'Producto Prueba3','Este es un producto prueba3',400,'Sin imagen','abcdef123',10)
 productM.getProducts()
-// productM.deleteProduct(1)
